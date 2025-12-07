@@ -25,6 +25,9 @@ def main(H, vis):
     val_loader = torch.utils.data.DataLoader(midi_data[:val_idx], batch_size=H.batch_size)
 
     log(f'Total train batches: {len(train_loader)}, eval: {len(val_loader)}')
+    if H.epochs:
+        H.train_steps = int(H.epochs * len(train_loader))
+        log(f'Training for {H.epochs} epochs, which equates to {H.train_steps} steps')
 
     sampler = get_sampler(H).cuda()
     optim = torch.optim.Adam(sampler.parameters(), lr=H.lr)

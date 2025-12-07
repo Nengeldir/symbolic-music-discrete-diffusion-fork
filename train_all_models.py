@@ -9,6 +9,13 @@ dataset = "data/POP909_melody.npy"
 bars = "64"
 batch_size = "4"
 tracks = "melody"
+# Note: If epochs is set (!= None), it overrides train_steps
+epochs = "100"
+train_steps = "100000"
+steps_per_log = "10"
+steps_per_eval = "100"
+steps_per_sample = "100"
+steps_per_checkpoint = "500"
 
 def train_model(model_name):
     print(f"==============================================")
@@ -22,7 +29,13 @@ def train_model(model_name):
         "--batch_size", batch_size,
         "--tracks", tracks,
         "--model", model_name,
-        "--amp"
+        "--epochs", epochs,
+        "--train_steps", train_steps,
+        "--steps_per_log", steps_per_log,
+        "--steps_per_eval", steps_per_eval,
+        "--steps_per_sample", steps_per_sample,
+        "--steps_per_checkpoint", steps_per_checkpoint,
+        "--amp",
     ]
     
     try:
