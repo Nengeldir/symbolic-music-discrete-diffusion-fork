@@ -938,7 +938,7 @@ class TrioConverter(BaseNoteSequenceConverter):
   def __init__(
       self, slice_bars=None, gap_bars=2, max_bars=1024, steps_per_quarter=4,
       quarters_per_bar=4, max_tensors_per_notesequence=5,
-      chord_encoding=None, condition_on_key=False):
+      chord_encoding=None, condition_on_key=False, presplit_on_time_changes=True):
     self._melody_converter = OneHotMelodyConverter(
         gap_bars=None, steps_per_quarter=steps_per_quarter,
         pad_to_total_time=True, presplit_on_time_changes=False,
@@ -974,7 +974,7 @@ class TrioConverter(BaseNoteSequenceConverter):
         control_depth=self._melody_converter.control_depth,
         control_dtype=self._melody_converter.control_dtype,
         end_token=False,
-        presplit_on_time_changes=True,
+        presplit_on_time_changes=presplit_on_time_changes,
         max_tensors_per_notesequence=max_tensors_per_notesequence)
 
   def _to_tensors_fn(self, note_sequence):

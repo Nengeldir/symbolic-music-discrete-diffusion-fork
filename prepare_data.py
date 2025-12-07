@@ -16,7 +16,7 @@ from preprocessing.data import TrioConverter, OneHotMelodyConverter
 
 def _load_midi_trio(bars, max_t_per_ns, midi):
     result = []
-    converter = TrioConverter(slice_bars=bars, max_tensors_per_notesequence=max_t_per_ns)
+    converter = TrioConverter(slice_bars=bars, max_tensors_per_notesequence=max_t_per_ns, gap_bars=None, presplit_on_time_changes=False)
     try:
         with warnings.catch_warnings(record=True):
             warnings.simplefilter("always")
@@ -30,7 +30,7 @@ def _load_midi_trio(bars, max_t_per_ns, midi):
 
 def _load_midi_melody(bars, max_t_per_ns, midi):
     result = []
-    converter = OneHotMelodyConverter(slice_bars=bars, max_tensors_per_notesequence=max_t_per_ns)
+    converter = OneHotMelodyConverter(slice_bars=bars, max_tensors_per_notesequence=max_t_per_ns, gap_bars=None, presplit_on_time_changes=False)
     try:
         with warnings.catch_warnings(record=True):
             warnings.simplefilter("always")
