@@ -123,4 +123,13 @@ def log_stats(step, stats):
 
 
 def set_up_visdom(H):
-    return visdom.Visdom(port=H.port)
+    try:
+        vis = visdom.Visdom(port=H.port, use_incoming_socket=False, raise_exceptions=True)
+        return vis
+    except Exception as e:
+        log(f"Failed to connect to Visdom server at port {H.port}: {e}")
+        log("Training will continue without visualization.")
+        class MockVisdom:
+            def __getattribute__(self, name):
+                return lambda *args, **kwargs: None
+        return MockVisdom()
