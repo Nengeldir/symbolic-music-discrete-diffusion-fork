@@ -14,14 +14,12 @@ from utils.train_utils import EMA, optim_warmup, augment_note_tensor
 
 
 def main(H, vis):
-    print("HELOOOO")
     midi_data = np.load(H.dataset_path, allow_pickle=True)
-    print(midi_data.shape)
     midi_data = SubseqSampler(midi_data, H.NOTES)
 
     val_idx = int(len(midi_data) * H.validation_set_size)
     train_loader = torch.utils.data.DataLoader(midi_data[val_idx:], batch_size=H.batch_size, shuffle=True,
-                                               pin_memory=True, num_workers=32)
+                                               pin_memory=True, num_workers=4)
     val_loader = torch.utils.data.DataLoader(midi_data[:val_idx], batch_size=H.batch_size)
 
     log(f'Total train batches: {len(train_loader)}, eval: {len(val_loader)}')
@@ -32,7 +30,6 @@ def main(H, vis):
     sampler = get_sampler(H).cuda()
     optim = torch.optim.Adam(sampler.parameters(), lr=H.lr)
 
-    print("HELOOOO")
     if H.ema:
         ema = EMA(H.ema_beta)
         ema_sampler = copy.deepcopy(sampler)

@@ -13,7 +13,8 @@ def log(output):
 
 
 def config_log(log_dir, filename="log.txt"):
-    log_dir = "logs/" + log_dir
+    if not os.path.isabs(log_dir):
+        log_dir = "logs/" + log_dir
     os.makedirs(log_dir, exist_ok=True)
     logging.basicConfig(
         filename=os.path.join(log_dir, filename),
@@ -55,15 +56,21 @@ def load_model(model, model_load_name, step, log_dir, strict=True):
 
 
 def save_samples(np_samples, step, log_dir):
-    log_dir = "logs/" + log_dir + "/samples"
+    if not os.path.isabs(log_dir):
+        log_dir = "logs/" + log_dir
+    log_dir = log_dir + "/samples"
     os.makedirs(log_dir, exist_ok=True)
     np.save(log_dir + f'/samples_{step}.npz', np_samples, allow_pickle=True)
 
 
 def save_stats(H, stats, step):
-    save_dir = f"logs/{H.log_dir}/saved_stats"
+    if os.path.isabs(H.log_dir):
+        log_dir = H.log_dir
+    else:
+        log_dir = f"logs/{H.log_dir}"
+    save_dir = f"{log_dir}/saved_stats"
     os.makedirs(save_dir, exist_ok=True)
-    save_path = f"logs/{H.log_dir}/saved_stats/stats_{step}"
+    save_path = f"{save_dir}/stats_{step}"
     log(f"Saving stats to {save_path}")
     torch.save(stats, save_path)
 
@@ -112,7 +119,11 @@ def vis_samples(vis, samples, step):
 
 
 def load_stats(H, step):
-    load_path = f"logs/{H.load_dir}/saved_stats/stats_{step}"
+    if os.path.isabs(H.load_dir):
+        load_dir = H.load_dir
+    else:
+        load_dir = f"logs/{H.load_dir}"
+    load_path = f"{load_dir}/saved_stats/stats_{step}"
     stats = torch.load(load_path)
     return stats
 
